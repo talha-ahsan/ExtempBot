@@ -55,7 +55,7 @@ def distance(article, country):
     distancesquare = 0
     for key in articleWords:
         termdifference = country.wordRate[key] - article.articleWordRate[key]
-        distancesquare += termdifference
+        distancesquare += (termdifference ** 2)
     return math.sqrt(distancesquare)
 
 #TODO: create an article to country decider off the distance function for each possible country. We'd need to create a ste of countrys etc. eww.
