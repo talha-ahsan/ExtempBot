@@ -15,6 +15,27 @@ class Article:
     articleURL = 'www.google.com'
     articleBody = 'This is the article"s body. Don"t hate, just procreate'
     articleBodyScrubbed = 'This is a cleaned up version of the article. I am too lazy to clean it atm so ignore this'
+    #do something to create article word rate, simply create a dictionary with toal occurences, and word count, and from there calculate per keyword the word rate
     articleWordRate = {'word': 12}
 
+#Ensures that the country has each item in the word cloud as also a key in the word rate.
+def updateCountryLists(country):
+    words = country.wordRate.keys()
+    for word in country.wordCloud:
+        if word not in words:
+            country.wordRate[word] = 0
+    for word in words:
+        if word not in country.wordCloud:
+            country.wordCloud.append(word)
 
+
+def updateClouds(article, country):
+    #takes article keywords, and adds them to the grand list if necessary
+    testwords = article.articleWordRate.keys()
+    for word in testwords:
+        if word not in totalWordCloud:
+            totalWordCloud.append(word)
+    for word in totalWordCloud:
+        if word not in country.wordCloud:
+            country.wordCloud.append(word)
+            country.wordRate[word] = 0
