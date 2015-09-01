@@ -1,7 +1,7 @@
 __author__ = 'talhaahsan'
 import math
 
-totalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
+globalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
 categories = ['China', 'Russia', 'Japan', 'blagh']
 
 class Country:
@@ -39,8 +39,8 @@ def updateClouds(article, country):
     # takes article keywords, and adds them to the grand list if necessary
     testwords = article.articleWordRate.keys()
     for word in testwords:
-        if word not in totalWordCloud:
-            totalWordCloud.append(word)
+        if word not in globalWordCloud:
+            globalWordCloud.append(word)
     # syncs total word cloud with country setups, this then ensures that each keyword in the article will be globally available, and also the country will have it before a test occurs.
     for word in totalWordCloud:
         if word not in country.wordCloud:
