@@ -1,7 +1,9 @@
 __author__ = 'talhaahsan'
 import math
 import re
+import operator #temp for testing
 from nltk.corpus import stopwords
+from newspaper import Article as nArticle
 
 stopwords = set(stopwords.words('english'))
 globalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
@@ -18,11 +20,12 @@ class Country:
     # Where wordRate[key] = wordTotalCount[key] * 1000 / totalWordCount
 
 class Article:
-    articleURL = 'www.google.com'
-    articleBody = 'This is the article"s body. Don"t hate, just procreate'
-    articleBodyScrubbed = 'This is a cleaned up version of the article. I am too lazy to clean it atm so ignore this'
     # do something to create article word rate, simply create a dictionary with toal occurences, and word count, and from there calculate per keyword the word rate
-    articleWordRate = {'word': 12}
+    articleWordRate = {}
+    
+    def __init__ (self, url, text):
+        self.articleURL = url
+        self.articleBody = text
 
 def updateClouds(article, country):
     # takes article keywords, and adds them to the grand list if necessary
@@ -58,8 +61,22 @@ def sanitize(text):
 	list = filter(lambda w: not w in stopwords, list)
 	return list
 
+def calculateWordRate(article):
+    words = sanitize(article.articleBody)
+    articleOccuranceCount = {}
+    totalWords = 0
+    for word in words:
+        if word not in articleOccuranceCount.keys():
+            articleOccuranceCount[word] = 0
+            
+        articleOccuranceCount[word] = articleOccuranceCount[word] + 1
+        totalWords += 1
+
+    for word in articleOccuranceCount.keys(): 
+        article.articleWordRate[word] = (articleOccuranceCount[word] * 1000) / totalWords
+
 def mergeText(article, country):
-    wordsToAdd = sanitize(article.articleBodyScrubbed)
+    wordsToAdd = sanitize(article.articleBody)
     for word in wordsToAdd:
         country.wordOccuranceCount[word] = country.wordOccuranceCount[word] + 1 #Can i just do += 1? ++ won't work
         country.totalWordCount += 1
@@ -68,4 +85,15 @@ def mergeText(article, country):
     return
 	
 if __name__ == '__main__':
-	print(sanitize("Hello, my name is Ben. Today, I made a python program."))
+    url = 'http://www.nytimes.com/2015/09/02/us/politics/ben-carson-advancing-in-polls-is-a-sharp-contrast-to-donald-trump.html'
+    narticle = nArticle(url)
+    narticle.download()
+    narticle.parse()
+    text = narticle.text
+    
+    article = Article(url, text)
+    calculateWordRate(article)
+    sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
+    for item in sortedWordRate:
+        print(item)
+	
