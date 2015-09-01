@@ -9,7 +9,7 @@ class Country:
     totalWordCount = 52
     countryFolderPath = "C:/Users/Ben/Collectionofcompletelysafeforworkstuff/notsketchyatallfolder/Extemp/IX/Asia/China"
     wordCloud = ['China', 'Japan', 'Economics', 'So On']
-    # WrodRate gives a probability out of 1000 words how many instances of the word which is the key will be present
+    # WordRate gives a probability out of 1000 words how many instances of the word which is the key will be present
     wordRate = {'China': 120, 'Japan': 50, 'Economics': 350}
     # We need to make sure that wordRate's keys are part of wordCloud, so we need a method to sync these repeatedly.
     wordTotalCount = {'China': 1500, 'Japan': 5000, 'ETC': 120}
