@@ -7,6 +7,7 @@ categories = ['China', 'Russia', 'Japan', 'blagh']
 class Country:
     #Contains total words in articles inside. Total word count inside China folder, and more!
     totalWordCount = 52
+    countryFolderPath = "C:/Users/Ben/Collectionofcompletelysafeforworkstuff/notsketchyatallfolder/Extemp/IX/Asia/China"
     wordCloud = ['China', 'Japan', 'Economics', 'So On']
     #WrodRate gives a probability out of 1000 words how many instances of the word which is the key will be present
     wordRate = {'China': 120, 'Japan': 50, 'Economics': 350}
@@ -55,3 +56,4 @@ def distance(article, country):
         distancesquare += termdifference
     return math.sqrt(distancesquare)
 
+#TODO: create an article to country decider off the distance function for each possible country. We'd need to create a ste of countrys etc. eww.
