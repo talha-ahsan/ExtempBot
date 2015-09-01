@@ -1,6 +1,6 @@
 __author__ = 'talhaahsan'
 import math
-
+import re
 globalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
 categories = ['China', 'Russia', 'Japan', 'blagh']
 
@@ -11,7 +11,7 @@ class Country:
     # WordRate gives a probability out of 1000 words how many instances of the word which is the key will be present
     wordRate = {'China': 120, 'Japan': 50, 'Economics': 350}
     # We need to make sure that wordRate's keys are part of wordCloud, so we need a method to sync these repeatedly.
-    wordTotalCount = {'China': 1500, 'Japan': 5000, 'ETC': 120}
+    wordOccuranceCount = {'China': 1500, 'Japan': 5000, 'ETC': 120}
     # Where wordRate[key] = wordTotalCount[key] * 1000 / totalWordCount
 
 class Article:
@@ -31,6 +31,7 @@ def updateClouds(article, country):
     for word in globalWordCloud:
         if word not in country.wordRate.keys():
             country.wordRate[word] = 0
+    return
 
 # compares article rate with country rate, returning the distance
 def distance(article, country):
@@ -45,3 +46,14 @@ def distance(article, country):
     return math.sqrt(distancesquare)
 
 # TODO: create an article to country decider off the distance function for each possible country. We'd need to create a ste of countrys etc. eww.
+def getWords(text):
+    return re.compile('\w+').findall(text)
+
+def mergeText(article, country):
+    wordsToAdd = getWords(article.articleBodyScrubbed)
+    for word in wordsToAdd:
+        country.wordOccuranceCount[word] = country.wordOccuranceCount[word] + 1 #Can i just do += 1? ++ won't work
+        country.totalWordCount += 1
+    for key in country.wordOccuranceCount.keys():
+        country.wordRate[key] = country.wordOccuranceCount[key] * 1000 / country.totalWordCount
+    return
