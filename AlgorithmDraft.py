@@ -1,6 +1,9 @@
 __author__ = 'talhaahsan'
 import math
 import re
+from nltk.corpus import stopwords
+
+stopwords = set(stopwords.words('english'))
 globalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
 categories = ['China', 'Russia', 'Japan', 'blagh']
 
@@ -47,7 +50,7 @@ def distance(article, country):
 
 # TODO: create an article to country decider off the distance function for each possible country. We'd need to create a ste of countrys etc. eww.
 def getWords(text):
-    return re.compile('\w+').findall(text)
+    return filter(lambda w: not w in stopwords, re.compile('\w+').findall(text))
 
 def mergeText(article, country):
     wordsToAdd = getWords(article.articleBodyScrubbed)
@@ -57,3 +60,6 @@ def mergeText(article, country):
     for key in country.wordOccuranceCount.keys():
         country.wordRate[key] = country.wordOccuranceCount[key] * 1000 / country.totalWordCount
     return
+	
+if __name__ == '__main__':
+	print(getWords("Hello, my name is Ben. Today, I made a python program."))
