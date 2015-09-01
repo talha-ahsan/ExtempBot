@@ -28,7 +28,7 @@ def updateClouds(article, country):
         if word not in globalWordCloud:
             globalWordCloud.append(word)
     # syncs total word cloud with country setups, this then ensures that each keyword in the article will be globally available, and also the country will have it before a test occurs.
-    for word in totalWordCloud:
+    for word in globalWordCloud:
         if word not in country.wordRate.keys():
             country.wordRate[word] = 0
 
