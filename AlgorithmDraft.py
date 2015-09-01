@@ -47,13 +47,19 @@ def distance(article, country):
         termdifference = country.wordRate[key] - article.articleWordRate[key]
         distancesquare += (termdifference ** 2)
     return math.sqrt(distancesquare)
-
-# TODO: create an article to country decider off the distance function for each possible country. We'd need to create a ste of countrys etc. eww.
-def getWords(text):
-    return filter(lambda w: not w in stopwords, re.compile('\w+').findall(text))
+	
+# removes stop words, makes lowercase. returns a list of words in the article
+def sanitize(text):
+	# first, make lowercase
+	text = text.lower()
+	# make a list of every word
+	list = re.compile('\w+').findall(text)
+	# lambda function that removes all stopwords
+	list = filter(lambda w: not w in stopwords, list)
+	return list
 
 def mergeText(article, country):
-    wordsToAdd = getWords(article.articleBodyScrubbed)
+    wordsToAdd = sanitize(article.articleBodyScrubbed)
     for word in wordsToAdd:
         country.wordOccuranceCount[word] = country.wordOccuranceCount[word] + 1 #Can i just do += 1? ++ won't work
         country.totalWordCount += 1
@@ -62,4 +68,4 @@ def mergeText(article, country):
     return
 	
 if __name__ == '__main__':
-	print(getWords("Hello, my name is Ben. Today, I made a python program."))
+	print(sanitize("Hello, my name is Ben. Today, I made a python program."))
