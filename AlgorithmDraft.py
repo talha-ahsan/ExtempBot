@@ -1,4 +1,5 @@
 __author__ = 'talhaahsan'
+import math
 
 totalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
 categories = ['China', 'Russia', 'Japan', 'blagh']
@@ -35,7 +36,22 @@ def updateClouds(article, country):
     for word in testwords:
         if word not in totalWordCloud:
             totalWordCloud.append(word)
+    #syncs total word cloud with country setups, this then ensures that each keyword in the article will be globally available, and also the country will have it before a test occurs.
     for word in totalWordCloud:
         if word not in country.wordCloud:
             country.wordCloud.append(word)
             country.wordRate[word] = 0
+
+#compares article rate with country rate, returning the distance
+def distance(article, country):
+    #make sure errors are minimized
+    updateClouds(article, country)
+    updateCountryLists(country)
+
+    articleWords = article.articleWordRate.keys()
+    distancesquare = 0
+    for key in articleWords:
+        termdifference = country.wordRate[key] - article.articleWordRate[key]
+        distancesquare += termdifference
+    return math.sqrt(distancesquare)
+
