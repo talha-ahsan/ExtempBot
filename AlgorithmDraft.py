@@ -56,14 +56,12 @@ def distance(article, country):
     return math.sqrt(distancesquare)
 	
 	
-# removes stop words, makes lowercase. returns a list of words in the article
+# makes lowercase. returns a list of words in the article
 def sanitize(text):
     # first, make lowercase
     text = text.lower()
     # make a list of every word
     list = re.compile('\w+').findall(text)
-    # lambda function that removes all stopwords
-    list = filter(lambda w: not w in stopwords, list)
     return list
 
 	
@@ -74,15 +72,18 @@ def calculateWordRate(article):
 	
     totalWords = 0
     for word in words:
-        if word not in article.articleOccuranceCount.keys():
-            article.articleOccuranceCount[word] = 0
-        
-		# count each word and count the total amount of words
-        article.articleOccuranceCount[word] = article.articleOccuranceCount[word] + 1
-        totalWords += 1
+	# ignore all stopwords
+        if word not in stopwords:
+            if word not in article.articleOccuranceCount.keys():
+                article.articleOccuranceCount[word] = 0
+			
+	    # count each word and count the total amount of words
+            article.articleOccuranceCount[word] = article.articleOccuranceCount[word] + 1
+            totalWords += 1
+			
 	# calculate the rate
-    for word in articleOccuranceCount.keys(): 
-        article.articleWordRate[word] = (articleOccuranceCount[word] * 1000) / totalWords
+    for word in article.articleOccuranceCount.keys(): 
+        article.articleWordRate[word] = (article.articleOccuranceCount[word] * 1000) / totalWords
 
 		
 # add an article's word data to the country's word data
