@@ -6,17 +6,18 @@ from nltk.corpus import stopwords
 from newspaper import Article as nArticle
 
 stopwords = set(stopwords.words('english'))
-globalWordCloud = ['China', 'Russia', 'Economics', 'Myanmar', 'Japan', 'Shinzo', 'Abe', 'Washington', 'Abbot', 'Shell', 'BP', 'Intel', 'So on']
-categories = ['China', 'Russia', 'Japan', 'blagh']
+globalWordCloud = ['Tags']
+categories = ['Country or Subject insert here']
 
 class Country:
     # Contains total words in articles inside. Total word count inside China folder, and more!
-    totalWordCount = 52
-    countryFolderPath = "C:/Users/Ben/Collectionofcompletelysafeforworkstuff/notsketchyatallfolder/Extemp/IX/Asia/China"
+    totalWordCount = 0
+    countryFolderPath = "folderpath"
     # WordRate gives a probability out of 1000 words how many instances of the word which is the key will be present
-    wordRate = {'China': 120, 'Japan': 50, 'Economics': 350}
+    #wordRate and wordOccuranceCount are both maps with string keys, and integer values. wordRate / 1000 * totalWordCount = the number of times the word has been seen
+    wordRate = {}
     # We need to make sure that wordRate's keys are part of wordCloud, so we need a method to sync these repeatedly.
-    wordOccuranceCount = {'China': 1500, 'Japan': 5000, 'ETC': 120}
+    wordOccuranceCount = {}
     # Where wordRate[key] = wordTotalCount[key] * 1000 / totalWordCount
 
 class Article:
@@ -96,4 +97,3 @@ if __name__ == '__main__':
     sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
     for item in sortedWordRate:
         print(item)
-	
