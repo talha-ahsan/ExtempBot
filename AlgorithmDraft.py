@@ -2,56 +2,79 @@ __author__ = 'talhaahsan'
 import math
 import re
 import operator #temp for testing
+import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
 
 stopwords = set(stopwords.words('english'))
 globalWordCloud = ['Tags']
-categories = ['Country or subject here']
 
-
-class Country:
+class Category:
+    name = ""
     # Contains total words in articles inside. Total word count inside China folder, and more!
     totalWordCount = 0
-    countryFolderPath = "folderpath"
+    categoryFolderPath = "folderpath"
     #wordRate and wordOccuranceCount are both maps with string keys, and integer values. wordRate / 1000 * totalWordCount = the number of times the word has been seen
     wordRate = {}
     wordOccuranceCount = {}
     # Where wordRate[key] = wordTotalCount[key] * 1000 / totalWordCount
+    
+    def __init__ (self, name, path):
+        self.name = name
+        self.categoryFolderPath = path
+    
+    def save(self):
+        saveFile = open(self.name + '.xcat', 'wb')
+        data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount]
+        pickle.dump(data, saveFile)
+        saveFile.close()
 
+    @classmethod
+    def loadFromFile(cls, name):
+        loadFile = open(name + '.xcat', 'rb')
+        data = pickle.load(loadFile)
+        loadFile.close()
+        cat = cls(data[0], data[2])
+        cat.totalWordCount = data[1]
+        cat.wordRate = data[3]
+        cat.wordOccuranceCount = data[4]
+        return cat
+
+categories = []
 	
 class Article:
-    # do something to create article word rate, simply create a dictionary with toal occurences, and word count, and from there calculate per keyword the word rate
     articleWordRate = {}
     articleOccuranceCount = {}
+    articleURL = ""
+    articleBody = ""
 
     def __init__ (self, url, text):
         self.articleURL = url
         self.articleBody = text
 
 		
-def updateClouds(article, country):
+def updateClouds(article, category):
     # takes article keywords, and adds them to the grand list if necessary
     testwords = article.articleWordRate.keys()
     for word in testwords:
         if word not in globalWordCloud:
             globalWordCloud.append(word)
-    # syncs total word cloud with country setups, this then ensures that each keyword in the article will be globally available, and also the country will have it before a test occurs.
+    # syncs total word cloud with category setups, this then ensures that each keyword in the article will be globally available, and also the category will have it before a test occurs.
     for word in globalWordCloud:
-        if word not in country.wordRate.keys():
-            country.wordRate[word] = 0
+        if word not in category.wordRate.keys():
+            category.wordRate[word] = 0
     return
 
 	
-# compares article rate with country rate, returning the distance
-def distance(article, country):
+# compares article rate with category rate, returning the distance
+def distance(article, category):
     # make sure errors are minimized
-    updateClouds(article, country)
+    updateClouds(article, category)
 
     articleWords = article.articleWordRate.keys()
     distancesquare = 0
     for key in articleWords:
-        termdifference = country.wordRate[key] - article.articleWordRate[key]
+        termdifference = category.wordRate[key] - article.articleWordRate[key]
         distancesquare += (termdifference ** 2)
     return math.sqrt(distancesquare)
 	
@@ -86,28 +109,51 @@ def calculateWordRate(article):
         article.articleWordRate[word] = (article.articleOccuranceCount[word] * 1000) / totalWords
 
 		
-# add an article's word data to the country's word data
-def mergeWords(article, country):
-	# update the occurrence count for the country as a whole, adding the occurrences from the article
+# add an article's word data to the category's word data
+def mergeWords(article, category):
+	# update the occurrence count for the category as a whole, adding the occurrences from the article
     for word in article.articleOccuranceCount:
-        country.wordOccuranceCount[word] = country.wordOccuranceCount[word] + article.articleOccuranceCount[word] #Can i just do += 1? ++ won't work
-        country.totalWordCount += 1
+        category.wordOccuranceCount[word] = category.wordOccuranceCount[word] + article.articleOccuranceCount[word] #Can i just do += 1? ++ won't work
+        category.totalWordCount += 1
 	# now update the word rate
-    for key in country.wordOccuranceCount.keys():
-        country.wordRate[key] = country.wordOccuranceCount[key] * 1000 / country.totalWordCount
+    for key in category.wordOccuranceCount.keys():
+        category.wordRate[key] = category.wordOccuranceCount[key] * 1000 / category.totalWordCount
     return
-	
+
+
+# saves all categories
+def saveCategories():
+    names = []
+    for category in categories:
+        category.save()
+        names.append(category.name)
+        print('Now saving ' + category.name + '.xcat...')
+    saveFile = open('categories.xdat', 'wb')
+    pickle.dump(names, saveFile)
+    saveFile.close()
+
+# loads all categories
+def loadCategories():
+    saveFile = open('categories.xdat', 'rb')
+    catNames = pickle.load(saveFile)
+    saveFile.close()
+    for catName in catNames:
+        cat = Category.loadFromFile(catName)
+        categories.append(cat)
 	
 if __name__ == '__main__':
-	# create a newspaper Article object
+    loadCategories()
+    saveCategories()
+    
+    # create a newspaper Article object
     url = 'http://www.nytimes.com/2015/09/02/us/politics/cnn-alters-debate-criteria-which-could-help-carly-fiorina.html'
     narticle = nArticle(url)
-	# download and parse the article (this gives us the clean text and info like author, date etc)
+    # download and parse the article (this gives us the clean text and info like author, date etc)
     narticle.download()
     narticle.parse()
     text = narticle.text
     
-	# create an article object and calculate the word rate
+    # create an article object and calculate the word rate
     article = Article(url, text)
     calculateWordRate(article)
     sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
