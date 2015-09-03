@@ -172,12 +172,9 @@ def loadKeywords():
 
 #Saves all keyworks from globalWordCloud to a file
 def saveKeywords():
-    keywords = []
-    for keyword in globalWordCloud:
-        keywords.append(keyword)
-        print('Now saving ' + keyword + '.xcat...')
+    keywords = globalWordCloud
     saveFile = open('keywords.xdat', 'wb')
-    pickle.dump(names, saveFile)
+    pickle.dump(keywords, saveFile)
     saveFile.close()
     return
 
