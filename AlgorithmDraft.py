@@ -17,7 +17,7 @@ class Category:
     #wordRate and wordOccuranceCount are both maps with string keys, and integer values. wordRate / 1000 * totalWordCount = the number of times the word has been seen
     wordRate = {}
     wordOccuranceCount = {}
-    # Where wordRate[key] = wordTotalCount[key] * 1000 / totalWordCount
+    # Where wordRate[key] = wordOccuranceCount[key] * 1000 / totalWordCount
     
     def __init__ (self, name, path):
         self.name = name
@@ -140,7 +140,17 @@ def loadCategories():
     for catName in catNames:
         cat = Category.loadFromFile(catName)
         categories.append(cat)
-	
+
+#initial calibration function for a category, takes the articles inside and sorts them
+def categoryCalibrate(category):
+    #TODO: create a list of articles currently in the folder using the folder path.
+
+    #TODO: run through the list, converting each article pdf file into an html file
+        #TODO: feed the article into newspaper to get the body text
+        #TODO: for each article after conversion, run through the text so that it can increment or update the wordOccuranceCount dict
+        #TODO: implement this https://www.binpress.com/tutorial/manipulating-pdfs-with-python/167
+
+
 if __name__ == '__main__':
     loadCategories()
     saveCategories()
