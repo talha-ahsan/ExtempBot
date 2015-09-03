@@ -5,8 +5,8 @@ import operator #temp for testing
 import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
-import Category
-import Article
+from Category import Category
+from Article import Article
 
 stopwords = set(stopwords.words('english'))
 globalWordCloud = ['Tags']
@@ -95,7 +95,6 @@ def categoryCalibrate(category):
     return
 
 def testMethod():
-    if __name__ == '__main__':
         loadCategories()
         saveCategories()
 
@@ -113,3 +112,6 @@ def testMethod():
         sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
         for item in sortedWordRate:
             print(item)
+
+if __name__ == '__main__':
+    testMethod()

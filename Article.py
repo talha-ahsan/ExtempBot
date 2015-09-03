@@ -5,7 +5,7 @@ import operator #temp for testing
 import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
-import Category.py
+import Category
 
 class Article:
     id = 0
