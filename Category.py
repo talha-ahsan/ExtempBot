@@ -1,4 +1,4 @@
-__author__ = 'talhaahsan'
+__author__ = 'talhaahsan and benpankow'
 import math
 import re
 import operator #temp for testing

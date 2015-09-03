@@ -1,4 +1,4 @@
-__author__ = 'talhaahsan'
+__author__ = 'talhaahsan and benpankow'
 import math
 import re
 import operator #temp for testing
@@ -7,11 +7,13 @@ from nltk.corpus import stopwords
 from newspaper import Article as nArticle
 import Category
 import Article
+
 stopwords = set(stopwords.words('english'))
 globalWordCloud = ['Tags']
 
 categories = []
 
+#Syncs article text with both global word cloud and the category's word cloud to make sure both have all possible keywords
 def updateClouds(article, category):
     # takes article keywords, and adds them to the grand list if necessary
     testwords = article.articleWordRate.keys()
@@ -23,7 +25,6 @@ def updateClouds(article, category):
         if word not in category.wordRate.keys():
             category.wordRate[word] = 0
     return
-
 	
 # compares article rate with category rate, returning the distance
 def distance(article, category):
