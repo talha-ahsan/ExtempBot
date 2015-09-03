@@ -19,15 +19,45 @@ class Category:
     wordOccuranceCount = {}
     # Where wordRate[key] = wordOccuranceCount[key] * 1000 / totalWordCount
     
+    # All the articles contained in this category
+    articles = []
+    
     def __init__ (self, name, path):
         self.name = name
         self.categoryFolderPath = path
     
     def save(self):
+        ids = []
+        for article in articles:
+            # article.save() TODO
+            ids.append(article.id)
+        
         saveFile = open(self.name + '.xcat', 'wb')
-        data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount]
+        data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount, ids]
         pickle.dump(data, saveFile)
         saveFile.close()
+        
+    # add an article's word data to the category's word data
+    def addArticle(self, article):
+        articles.append(article)
+        # update the occurrence count for the category as a whole, adding the occurrences from the article
+        for word in article.articleOccuranceCount:
+            self.wordOccuranceCount[word] = self.wordOccuranceCount[word] + article.articleOccuranceCount[word]
+            self.totalWordCount += article.articleOccuranceCount[word]
+        # now update the word rate
+        for key in self.wordOccuranceCount.keys():
+            self.wordRate[key] = self.wordOccuranceCount[key] * 1000 / self.totalWordCount
+            
+    # remove an article from this category
+    def removeArticle(self, article):
+        articles.remove(article)
+        # update the occurrence count for the category as a whole, subtracting the occurrences from the article
+        for word in article.articleOccuranceCount:
+            self.wordOccuranceCount[word] = self.wordOccuranceCount[word] - article.articleOccuranceCount[word]
+            self.totalWordCount -= article.articleOccuranceCount[word]
+        # now update the word rate
+        for key in self.wordOccuranceCount.keys():
+            self.wordRate[key] = self.wordOccuranceCount[key] * 1000 / self.totalWordCount
 
     @classmethod
     def loadFromFile(cls, name):
@@ -38,11 +68,18 @@ class Category:
         cat.totalWordCount = data[1]
         cat.wordRate = data[3]
         cat.wordOccuranceCount = data[4]
+        ids = data[5]
+        for id in ids:
+            # article = Article.loadFromFile(id)
+            # cat.articles.append(article)
+            id = id
+        
         return cat
 
 categories = []
 	
 class Article:
+    id = 0
     articleWordRate = {}
     articleOccuranceCount = {}
     articleURL = ""
@@ -51,6 +88,24 @@ class Article:
     def __init__ (self, url, text):
         self.articleURL = url
         self.articleBody = text
+        
+    # counts occurrence of each word in the article (this number is saved for category calculation later) and used to determine the word rate
+    def calculateWordRate(self):
+        # get a list of words in the article
+        words = sanitize(self.articleBody)
+        
+        totalWords = 0
+        for word in words:
+        # ignore all stopwords
+            if word not in stopwords:
+                if word not in self.articleOccuranceCount.keys():
+                    self.articleOccuranceCount[word] = 0
+                # count each word and count the total amount of words
+                self.articleOccuranceCount[word] = self.articleOccuranceCount[word] + 1
+                totalWords += 1
+        # calculate the rate
+        for word in self.articleOccuranceCount.keys(): 
+            self.articleWordRate[word] = (self.articleOccuranceCount[word] * 1000) / totalWords
 
 		
 def updateClouds(article, category):
@@ -87,39 +142,6 @@ def sanitize(text):
     list = re.compile('\w+').findall(text)
     return list
 
-	
-# counts occurrence of each word in the article (this number is saved for category calculation later) and used to determine the word rate
-def calculateWordRate(article):
-	# get a list of words in the article
-    words = sanitize(article.articleBody)
-	
-    totalWords = 0
-    for word in words:
-	# ignore all stopwords
-        if word not in stopwords:
-            if word not in article.articleOccuranceCount.keys():
-                article.articleOccuranceCount[word] = 0
-			
-	    # count each word and count the total amount of words
-            article.articleOccuranceCount[word] = article.articleOccuranceCount[word] + 1
-            totalWords += 1
-			
-	# calculate the rate
-    for word in article.articleOccuranceCount.keys(): 
-        article.articleWordRate[word] = (article.articleOccuranceCount[word] * 1000) / totalWords
-
-		
-# add an article's word data to the category's word data
-def mergeWords(article, category):
-	# update the occurrence count for the category as a whole, adding the occurrences from the article
-    for word in article.articleOccuranceCount:
-        category.wordOccuranceCount[word] = category.wordOccuranceCount[word] + article.articleOccuranceCount[word] #Can i just do += 1? ++ won't work
-        category.totalWordCount += 1
-	# now update the word rate
-    for key in category.wordOccuranceCount.keys():
-        category.wordRate[key] = category.wordOccuranceCount[key] * 1000 / category.totalWordCount
-    return
-
 
 # saves all categories
 def saveCategories():
@@ -141,6 +163,7 @@ def loadCategories():
         cat = Category.loadFromFile(catName)
         categories.append(cat)
 
+
 #initial calibration function for a category, takes the articles inside and sorts them
 def categoryCalibrate(category):
     #TODO: create a list of articles currently in the folder using the folder path.
@@ -149,7 +172,7 @@ def categoryCalibrate(category):
         #TODO: feed the article into newspaper to get the body text
         #TODO: for each article after conversion, run through the text so that it can increment or update the wordOccuranceCount dict
         #TODO: implement this https://www.binpress.com/tutorial/manipulating-pdfs-with-python/167
-
+    return
 
 if __name__ == '__main__':
     loadCategories()
@@ -165,7 +188,7 @@ if __name__ == '__main__':
     
     # create an article object and calculate the word rate
     article = Article(url, text)
-    calculateWordRate(article)
+    article.calculateWordRate()
     sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
     for item in sortedWordRate:
         print(item)
