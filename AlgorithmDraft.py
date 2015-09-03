@@ -163,6 +163,24 @@ def loadCategories():
         cat = Category.loadFromFile(catName)
         categories.append(cat)
 
+#Loads all keywords from GlobalWordCloud
+def loadKeywords():
+    saveFile = open('keywords.xdat', 'rb')
+    globalWordCloud = pickle.load(saveFile)
+    saveFile.close()
+    return
+
+#Saves all keyworks from globalWordCloud to a file
+def saveKeywords():
+    keywords = []
+    for keyword in globalWordCloud:
+        keywords.append(keyword)
+        print('Now saving ' + keyword + '.xcat...')
+    saveFile = open('keywords.xdat', 'wb')
+    pickle.dump(names, saveFile)
+    saveFile.close()
+    return
+
 
 #initial calibration function for a category, takes the articles inside and sorts them
 def categoryCalibrate(category):
@@ -173,6 +191,7 @@ def categoryCalibrate(category):
         #TODO: for each article after conversion, run through the text so that it can increment or update the wordOccuranceCount dict
         #TODO: implement this https://www.binpress.com/tutorial/manipulating-pdfs-with-python/167
     return
+
 
 if __name__ == '__main__':
     loadCategories()
