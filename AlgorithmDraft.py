@@ -6,6 +6,8 @@ import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
 
+nextArticleID = 1
+
 stopwords = set(stopwords.words('english'))
 globalWordCloud = ['Tags']
 
@@ -28,22 +30,13 @@ class Category:
         self.name = name
         self.categoryFolderPath = path
 
-    def save(self):
-        ids = []
-        for article in articles:
-            # article.save() TODO
-            ids.append(article.id)
-
-        saveFile = open(self.name + '.xcat', 'wb')
-        data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount, ids]
-        pickle.dump(data, saveFile)
-        saveFile.close()
-
     # add an article's word data to the category's word data
     def addArticle(self, article):
-        articles.append(article)
+        self.articles.append(article)
         # update the occurrence count for the category as a whole, adding the occurrences from the article
         for word in article.articleOccuranceCount:
+            if word not in self.wordOccuranceCount:
+                self.wordOccuranceCount[word] = 0
             self.wordOccuranceCount[word] = self.wordOccuranceCount[word] + article.articleOccuranceCount[word]
             self.totalWordCount += article.articleOccuranceCount[word]
         # now update the word rate
@@ -60,6 +53,17 @@ class Category:
         # now update the word rate
         for key in self.wordOccuranceCount.keys():
             self.wordRate[key] = self.wordOccuranceCount[key] * 1000 / self.totalWordCount
+            
+    def save(self):
+        ids = []
+        for article in self.articles:
+            article.save()
+            ids.append(article.id)
+            
+        saveFile = open(self.name + '.xcat', 'wb')
+        data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount, ids]
+        pickle.dump(data, saveFile)
+        saveFile.close()
 
     @classmethod
     def loadFromFile(cls, name):
@@ -72,8 +76,8 @@ class Category:
         cat.wordOccuranceCount = data[4]
         ids = data[5]
         for id in ids:
-            # article = Article.loadFromFile(id)
-            # cat.articles.append(article)
+            article = Article.loadFromFile(id)
+            cat.articles.append(article)
             id = id
 
         return cat
@@ -86,7 +90,8 @@ class Article:
     articleURL = ""
     articleBody = ""
 
-    def __init__ (self, url, text):
+    def __init__ (self, id, url, text):
+        self.id = id
         self.articleURL = url
         self.articleBody = text
 
@@ -107,6 +112,23 @@ class Article:
         # calculate the rate
         for word in self.articleOccuranceCount.keys():
             self.articleWordRate[word] = (self.articleOccuranceCount[word] * 1000) / totalWords
+    
+    def save(self):
+        saveFile = open('article' + str(self.id) + '.xart', 'wb')
+        data = [self.id, self.articleWordRate, self.articleOccuranceCount, self.articleURL, self.articleBody]
+        pickle.dump(data, saveFile)
+        saveFile.close()
+
+    @classmethod
+    def loadFromFile(cls, id):
+        loadFile = open('article' + str(id) + '.xart', 'rb')
+        data = pickle.load(loadFile)
+        loadFile.close()
+        art = cls(id, data[3], data[4])
+        art.articleWordRate = data[1]
+        art.articleOccuranceCount = data[2]
+
+        return art
 
 #Syncs article text with both global word cloud and the category's word cloud to make sure both have all possible keywords
 def updateClouds(article, category):
@@ -177,6 +199,23 @@ def saveKeywords():
     pickle.dump(keywords, saveFile)
     saveFile.close()
     return
+    
+#Loads a variety of misc information, right now just the next article ID
+def loadMisc():
+    global nextArticleID
+    saveFile = open('misc.xdat', 'rb')
+    miscItems = pickle.load(saveFile)
+    nextArticleID = miscItems[0]
+    saveFile.close()
+    return
+    
+#Saves a variety of misc information, right now just the next article ID
+def saveMisc():
+    list = [ nextArticleID ]
+    saveFile = open('misc.xdat', 'wb')
+    pickle.dump(list, saveFile)
+    saveFile.close()
+    return
 
 
 #initial calibration function for a category, takes the articles inside and sorts them
@@ -188,25 +227,40 @@ def categoryCalibrate(category):
         #TODO: for each article after conversion, run through the text so that it can increment or update the wordOccuranceCount dict
         #TODO: implement this https://www.binpress.com/tutorial/manipulating-pdfs-with-python/167
     return
+    
+    
+def getNextArticleID():
+    global nextArticleID
+    nextArticleID += 1
+    return nextArticleID
 
 def testMethod():
-        loadCategories()
-        saveCategories()
+    loadMisc()
+    loadCategories()
+    
+    print("\n" + categories[0].name + "\n-Word Rate for 'republican': " + str(categories[0].wordRate["republican"]) + "/1000\n-Word Occurance for 'republican': " + str(categories[0].wordOccuranceCount["republican"]) + "/" + str(categories[0].totalWordCount))
+    print("\nArticle no." + str(categories[0].articles[0].id) + "\n-Word Rate for 'republican': " + str(categories[0].articles[0].articleWordRate["republican"]) + "/1000\n-Word Occurance for 'republican': " + str(categories[0].articles[0].articleOccuranceCount["republican"]) + "\n")
 
-        # create a newspaper Article object
-        url = 'http://www.nytimes.com/2015/09/02/us/politics/cnn-alters-debate-criteria-which-could-help-carly-fiorina.html'
-        narticle = nArticle(url)
-        # download and parse the article (this gives us the clean text and info like author, date etc)
-        narticle.download()
-        narticle.parse()
-        text = narticle.text
+    saveCategories()
+    saveMisc()
 
-        # create an article object and calculate the word rate
-        article = Article(url, text)
-        article.calculateWordRate()
-        sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
-        for item in sortedWordRate:
-            print(item)
+def testMethod2():
+    cat = Category("2016 Election", "")
+    # create a newspaper Article object
+    url = 'http://www.nytimes.com/2015/09/02/us/politics/cnn-alters-debate-criteria-which-could-help-carly-fiorina.html'
+    narticle = nArticle(url)
+    # download and parse the article (this gives us the clean text and info like author, date etc)
+    narticle.download()
+    narticle.parse()
+    text = narticle.text
+
+    # create an article object and calculate the word rate
+    id = getNextArticleID()
+    article = Article(id, url, text)
+    article.calculateWordRate()
+    sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
+    cat.addArticle(article)
+    categories.append(cat)
 
 if __name__ == '__main__':
     testMethod()
