@@ -1,7 +1,7 @@
 __author__ = 'talhaahsan and benpankow'
 import math
 import re
-import os
+import operator #temp for testing
 import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
@@ -9,27 +9,29 @@ from newspaper import Article as nArticle
 nextArticleID = 1
 
 stopwords = set(stopwords.words('english'))
+globalWordCloud = []
 
 categories = []
 
 class Category:
+    name = ""
+    # Contains total words in articles inside. Total word count inside China folder, and more!
+    totalWordCount = 0
+    categoryFolderPath = "folderpath"
+    #wordRate and wordOccuranceCount are both maps with string keys, and integer values. wordRate / 1000 * totalWordCount = the number of times the word has been seen
+    wordRate = {}
+    wordOccuranceCount = {}
+    # Where wordRate[key] = wordOccuranceCount[key] * 1000 / totalWordCount
+
+    # All the articles contained in this category
+    articles = []
 
     def __init__ (self, name, path):
         self.name = name
         self.categoryFolderPath = path
-        # Contains total words in articles inside. Total word count inside China folder, and more!
-        self.totalWordCount = 0
-        #wordRate and wordOccuranceCount are both maps with string keys, and integer values. wordRate / 1000 * totalWordCount = the number of times the word has been seen
-        self.wordRate = {}
-        self.wordOccuranceCount = {}
-        # Where wordRate[key] = wordOccuranceCount[key] * 1000 / totalWordCount
-
-        # All the articles contained in this category
-        self.articles = []
 
     # add an article's word data to the category's word data
     def addArticle(self, article):
-        print("adding article " + str(article.id) + " to " + self.name)
         self.articles.append(article)
         # update the occurrence count for the category as a whole, adding the occurrences from the article
         for word in article.articleOccuranceCount:
@@ -65,17 +67,6 @@ class Category:
         data = [self.name, self.totalWordCount, self.categoryFolderPath, self.wordRate, self.wordOccuranceCount, ids]
         pickle.dump(data, saveFile)
         saveFile.close()
-        
-    def delete(self):
-        for article in self.articles:
-            try:
-                os.remove('article' + str(article.id) + '.xart')
-            except OSError:
-                pass
-        try:
-            os.remove(self.name + '.xcat')
-        except OSError:
-            pass
 
     @classmethod
     def loadFromFile(cls, name):
@@ -96,13 +87,16 @@ class Category:
         
 
 class Article:
+    id = 0
+    articleWordRate = {}
+    articleOccuranceCount = {}
+    articleURL = ""
+    articleBody = ""
 
     def __init__ (self, id, url, text):
         self.id = id
         self.articleURL = url
         self.articleBody = text
-        self.articleWordRate = {}
-        self.articleOccuranceCount = {}
 
     # counts occurrence of each word in the article (this number is saved for category calculation later) and used to determine the word rate
     def calculateWordRate(self):
@@ -139,11 +133,15 @@ class Article:
 
         return art
 
-#Syncs article text with category words
-def updateCategoryWords(article, category):
-    # takes article keywords, and adds them to the category list if necessary
+#Syncs article text with both global word cloud and the category's word cloud to make sure both have all possible keywords
+def updateClouds(article, category):
+    # takes article keywords, and adds them to the grand list if necessary
     testwords = article.articleWordRate.keys()
     for word in testwords:
+        if word not in globalWordCloud:
+            globalWordCloud.append(word)
+    # syncs total word cloud with category setups, this then ensures that each keyword in the article will be globally available, and also the category will have it before a test occurs.
+    for word in globalWordCloud:
         if word not in category.wordRate.keys():
             category.wordRate[word] = 0
     return
@@ -151,7 +149,7 @@ def updateCategoryWords(article, category):
 # compares article rate with category rate, returning the distance
 def distance(article, category):
     # make sure errors are minimized
-    updateCategoryWords(article, category)
+    updateClouds(article, category)
 
     categoryWords = category.wordRate.keys()
     distancesquare = 0
@@ -166,7 +164,7 @@ def distance(article, category):
 # this version only uses the article's words
 def distanceAO(article, category):
     # make sure errors are minimized
-    updateCategoryWords(article, category)
+    updateClouds(article, category)
 
     articleWords = article.articleWordRate.keys()
     distancesquare = 0
@@ -204,6 +202,22 @@ def loadCategories():
     for catName in catNames:
         cat = Category.loadFromFile(catName)
         categories.append(cat)
+
+#Loads all keywords from GlobalWordCloud
+def loadKeywords():
+    global globalWordCloud
+    saveFile = open('keywords.xdat', 'rb')
+    globalWordCloud = pickle.load(saveFile)
+    saveFile.close()
+    return
+
+#Saves all keyworks from globalWordCloud to a file
+def saveKeywords():
+    keywords = globalWordCloud
+    saveFile = open('keywords.xdat', 'wb')
+    pickle.dump(keywords, saveFile)
+    saveFile.close()
+    return
     
 #Loads a variety of misc information, right now just the next article ID
 def loadMisc():
@@ -238,147 +252,19 @@ def getNextArticleID():
     global nextArticleID
     nextArticleID += 1
     return nextArticleID
-    
-def closestCategory(article):
-    minDist = -1
-    closestCat = categories[0]
-    for category in categories:
-        if (minDist == -1):
-            minDist = distanceAO(article, category)
-            print("Distance to " + category.name + ": " + str(minDist))
-            closestCat = category
-        else:
-            dist = distanceAO(article, category)
-            print("Distance to " + category.name + ": " + str(dist))
-            if (dist < minDist):
-                minDist = dist
-                closestCat = category  
-    return closestCat
-
-def getCategory(name):
-    for category in categories:
-        if (category.name == name):
-            return category
-    else:
-        return None
-        
-def topNWords(category, num):
-    if (num > len(category.wordOccuranceCount)):
-        num = len(category.wordOccuranceCount)
-    topWords = []
-    topCount = []
-    for i in range(0, num):
-        key = category.wordOccuranceCount.keys()[i]
-        topWords.append(key)
-        topCount.append(0)
-    for word in category.wordOccuranceCount.keys():
-        i = num - 1
-        while i > -2:
-            # print(str(i) + " " + word)
-            if (i > -1 and category.wordOccuranceCount[word] >= topCount[i]):
-                if (i < num - 1):
-                    topCount[i + 1] = topCount[i]
-                    topWords[i + 1] = topWords[i]
-            else:
-                if (i < num - 1):
-                    topCount[i + 1] = category.wordOccuranceCount[word]
-                    topWords[i + 1] = word
-                break
-            i = i - 1
-    return [topWords, topCount]
-    
-def manualCategorization():
-    loadMisc()
-    loadCategories()
-    cmd = ""
-    cmd = raw_input('\n\n\n\nWhat would you like to do? (use "help" for help): ')
-    cmd = cmd.lower()
-    while (cmd != "exit"):
-        if (cmd == "help"):
-            print("\nhelp\t\tGet help")
-            print("exit\t\tExit the program")
-            print("cat NAME\tCreate a category with indicated name")
-            print("delcat NAME\tDelete a category with indicated name")
-            print("catdat NAME\tGet info for the specified category")
-            print("URL\t\t\tBegin processing an article at the designated URL")
-            print("lscat\t\tList all categories")
-        elif (cmd[:4] == "cat "):
-            catName = cmd[4:]
-            cat = Category(catName, "")
-            categories.append(cat)
-            print("\nCategory '" + catName + "' successfully created!")
-        elif (cmd[:7] == "delcat "):
-            catName = cmd[7:]
-            cmd = raw_input('\nAre you sure you would like to delete category ' + catName + '? This will remove all contained articles and cannot be reversed. (y/n): ')
-            cmd = cmd.lower()
-            if (cmd == "y"):
-                category = getCategory(catName)
-                if (category != None):
-                    category.delete()
-                    categories.remove(category)
-                    print("\nCategory '" + catName + "' successfully deleted!")
-                else:
-                    print("\nNo category with name '" + catName + "' found")
-        elif (cmd[:7] == "catdat "):
-            catName = cmd[7:]
-            category = getCategory(catName)
-            if (category != None):
-                articleNames = ""
-                for article in category.articles:
-                    articleNames = articleNames + str(article.id) + ", "
-                print("\nIncluded articles: " + articleNames)
-                dat = topNWords(category, 10)
-                words = dat[0]
-                counts = dat[1]
-                for i in range(0, len(words)):
-                    print(str(i + 1) + ": " + words[i] + "\t\t" + str(counts[i]))
-            else:
-                print("\nNo category with name '" + catName + "' found")
-        elif (cmd == "lscat"):
-            print("")
-            for category in categories:
-                print(category.name)
-        elif (cmd[:4] == "http"):
-            url = cmd
-            narticle = nArticle(url)
-            narticle.download()
-            narticle.parse()
-            text = narticle.text
-
-            # create an article object and calculate the word rate
-            id = getNextArticleID()
-            article = Article(id, url, text)
-            article.calculateWordRate()
-            
-            closestCat = closestCategory(article)
-            title = narticle.title.encode("utf-8")
-            print("Suggested category: " + closestCat.name)
-            cmd = raw_input("Which category would you like to add '" + title + "' to?: ")
-            cmd = cmd.lower()
-            category = getCategory(cmd)
-            while (category == None):
-                cmd = raw_input("\nWhich category would you like to add '" + title + "' to?: ")
-                cmd = cmd.lower()
-                category = getCategory(cmd)
-            category.addArticle(article)
-            
-        cmd = raw_input('\nWhat would you like to do? (use "help" for help): ')
-        cmd = cmd.lower()
-        
-    saveCategories()
-    saveMisc()
 
 def testMethod():
+    loadKeywords()
     loadMisc()
     loadCategories()
     
     print("\n" + categories[0].name + "\n-Word Rate for 'republican': " + str(categories[0].wordRate["republican"]) + "/1000\n-Word Occurance for 'republican': " + str(categories[0].wordOccuranceCount["republican"]) + "/" + str(categories[0].totalWordCount))
     print("\nArticle no." + str(categories[0].articles[0].id) + "\n-Word Rate for 'republican': " + str(categories[0].articles[0].articleWordRate["republican"]) + "/1000\n-Word Occurance for 'republican': " + str(categories[0].articles[0].articleOccuranceCount["republican"]) + "\n")
     print(distance(categories[0].articles[0], categories[0]))
-    print(closestCategory(categories[0].articles[0]).name)
-
+    
     saveCategories()
     saveMisc()
+    saveKeywords()
 
 def testMethod2():
     # create a newspaper Article object
@@ -397,4 +283,4 @@ def testMethod2():
     categories[0].addArticle(article)
 
 if __name__ == '__main__':
-    manualCategorization()
+    testMethod()
