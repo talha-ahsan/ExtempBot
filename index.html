@@ -19,7 +19,22 @@
     </section>
 
     <section class="main-content">
-      <ol>
+      <h1>
+<a id="extemporaneous-speaking" class="anchor" href="#extemporaneous-speaking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extemporaneous Speaking</h1>
+
+<p>Extemporaneous Speaking (Extemp) is a category of competitive speech and forensics in which participants are given one of three questions to choose from. Each question deals with current events, looking at events from the implications of the Arab Spring, to China's economic growth, to the recent 2016 election headlines. Participants after choosing a question are given 30 minutes to prepare and memorize a 7 minute speech. During this time they are allowed to use any resources they have saved on their computers or have brought in print, but can not access the internet in any capacity during their preparation time. </p>
+
+<p>Due to the breadth of topics available, as well as the expectation that each speech has a citation per minute at a minimum for a participant to be deemed competitive, students will scour the web for sources before a round, attempting to save anything and everything available. This leads to the manual saving of files from common publications like the New York Times, Washington Post, Wall Street Journal, as well as some specific think tanks like the Center for American Progress, the CATO institute, The Council on Foreign Relations, and The Brookings Institute. Finding resources and saving them manually with manual sorting methods can take anywhere from 8 to 16 hours per week per person depending on the size of the extemp team. An automated sorting method will also fall short often times due to inaccuracy in categorizing articles. </p>
+
+<h1>
+<a id="goal" class="anchor" href="#goal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal</h1>
+
+<p>The ExtempBot is a collaboration between Talha Ahsan and Benjamin Pankow to create an effective automation of extemp research, bringing in concepts from social network analysis, and very broad ideas from machine learning to create a more effective approach. The goal is to have a single application which can over the course of a few minutes, complete hours of research in an accurate way. </p>
+
+<h1>
+<a id="method" class="anchor" href="#method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Method</h1>
+
+<ol>
 <li><p>The bot uses a library named Newspaper in order to obtain multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p></li>
 <li><p>The bot then runs through each article creating functionally a word cloud, with the occurences of the word per a certain constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly affecting sorting.</p></li>
 <li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0.</p></li>
