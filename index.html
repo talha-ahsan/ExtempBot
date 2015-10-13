@@ -52,12 +52,16 @@
 <p>Bot to automate extemp research. The bot functions using three main parts:</p>
 
 <ol>
-<li><p>The bot utilizes a library named "Newspaper" in conjunction with a whitelist of RSS feeds. This process takes in those feeds and returns a collection of articles preferably in pdf form which are then put into the sorter</p></li>
+<li><p>The bot uses a library named Newspaper in order to obtain multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p></li>
 <li><p>The bot then runs through each article creating functionally a word cloud, with the occurences of the word per a certain constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly affecting sorting.</p></li>
-<li><p>Sorting is done using a distance algorithm using a single plane per each word occuring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0.</p></li>
+<li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0.</p></li>
 </ol>
 
-<p>TODO: Auto feed articles that are pre-sorted to establish base categories, then auto-feed articles from websites and auto-sort.</p>
+<p><img src="https://scontent.xx.fbcdn.net/hphotos-xpf1/v/t34.0-12/11995698_1658016897780546_1577559025_n.jpg?oh=d333e82eb6deee456a94db61184b7477&amp;oe=561F4488" alt=""></p>
+
+<p><a href="https://scontent.xx.fbcdn.net/hphotos-xaf1/v/t34.0-12/11997028_1658016437780592_1108120312_n.jpg?oh=d0910908e4c10d9eee3b65d4e4721519&amp;oe=56200F64">https://scontent.xx.fbcdn.net/hphotos-xaf1/v/t34.0-12/11997028_1658016437780592_1108120312_n.jpg?oh=d0910908e4c10d9eee3b65d4e4721519&amp;oe=56200F64</a></p>
+
+<p><a href="https://scontent.xx.fbcdn.net/hphotos-xta1/v/t34.0-12/11997210_1658016157780620_1670084691_n.jpg?oh=99dd827ef382eaf8534b716fbcb6958b&amp;oe=561F4C2B">https://scontent.xx.fbcdn.net/hphotos-xta1/v/t34.0-12/11997210_1658016157780620_1670084691_n.jpg?oh=99dd827ef382eaf8534b716fbcb6958b&amp;oe=561F4C2B</a></p>
       </section>
 
       <footer>
