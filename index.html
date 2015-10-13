@@ -1,57 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="viewport" content="width=640">
-
-    <link rel="stylesheet" href="stylesheets/core.css" media="screen">
-    <link rel="stylesheet" href="stylesheets/mobile.css" media="handheld, only screen and (max-device-width:640px)">
-    <link rel="stylesheet" href="stylesheets/github-light.css">
-
-    <script type="text/javascript" src="javascripts/modernizr.js"></script>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $('#main_content').headsmart()
-      })
-    </script>
+    <meta charset="UTF-8">
     <title>Extempbot by stwyde</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
-    <a id="forkme_banner" href="https://github.com/stwyde/ExtempBot">View on GitHub</a>
-    <div class="shell">
+    <section class="page-header">
+      <h1 class="project-name">Extempbot</h1>
+      <h2 class="project-tagline">A Bot to automate extemp research *Beep Boop*</h2>
+      <a href="https://github.com/stwyde/ExtempBot" class="btn">View on GitHub</a>
+      <a href="https://github.com/stwyde/ExtempBot/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/stwyde/ExtempBot/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-      <header>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <h1>Extempbot</h1>
-            <h2>A Bot to automate extemp research *Beep Boop*</h2>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-      </header>
-
-      <section id="downloads">
-        <span class="inner">
-          <a href="https://github.com/stwyde/ExtempBot/zipball/master" class="zip"><em>download</em> .ZIP</a><a href="https://github.com/stwyde/ExtempBot/tarball/master" class="tgz"><em>download</em> .TGZ</a>
-        </span>
-      </section>
-
-
-      <span class="banner-fix"></span>
-
-
-      <section id="main_content">
-        <h1>
-<a id="extempbot" class="anchor" href="#extempbot" aria-hidden="true"><span class="octicon octicon-link"></span></a>ExtempBot</h1>
-
-<p>Bot to automate extemp research. The bot functions using three main parts:</p>
-
-<ol>
+    <section class="main-content">
+      <ol>
 <li><p>The bot uses a library named Newspaper in order to obtain multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p></li>
 <li><p>The bot then runs through each article creating functionally a word cloud, with the occurences of the word per a certain constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly affecting sorting.</p></li>
 <li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0.</p></li>
@@ -62,22 +30,15 @@
 <p><a href="https://scontent.xx.fbcdn.net/hphotos-xaf1/v/t34.0-12/11997028_1658016437780592_1108120312_n.jpg?oh=d0910908e4c10d9eee3b65d4e4721519&amp;oe=56200F64">https://scontent.xx.fbcdn.net/hphotos-xaf1/v/t34.0-12/11997028_1658016437780592_1108120312_n.jpg?oh=d0910908e4c10d9eee3b65d4e4721519&amp;oe=56200F64</a></p>
 
 <p><a href="https://scontent.xx.fbcdn.net/hphotos-xta1/v/t34.0-12/11997210_1658016157780620_1670084691_n.jpg?oh=99dd827ef382eaf8534b716fbcb6958b&amp;oe=561F4C2B">https://scontent.xx.fbcdn.net/hphotos-xta1/v/t34.0-12/11997210_1658016157780620_1670084691_n.jpg?oh=99dd827ef382eaf8534b716fbcb6958b&amp;oe=561F4C2B</a></p>
-      </section>
 
-      <footer>
-        <span class="ribbon-outer">
-          <span class="ribbon-inner">
-            <p>this project by <a href="https://github.com/stwyde">stwyde</a> can be found on <a href="https://github.com/stwyde/ExtempBot">GitHub</a></p>
-          </span>
-          <span class="left-tail"></span>
-          <span class="right-tail"></span>
-        </span>
-        <p>Generated with <a href="https://pages.github.com">GitHub Pages</a> using Merlot</p>
-        <span class="octocat"></span>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/stwyde/ExtempBot">Extempbot</a> is maintained by <a href="https://github.com/stwyde">stwyde</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
 
-    </div>
+    </section>
 
-    
+  
   </body>
 </html>
