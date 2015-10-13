@@ -34,11 +34,21 @@
 <h1>
 <a id="method" class="anchor" href="#method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Method</h1>
 
+<p>The bot works in three steps, retrieval, scrubbing, classification or sorting. 
+1. The bot obtains multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p>
+
 <ol>
-<li><p>The bot uses a library named Newspaper in order to obtain multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p></li>
 <li><p>The bot then runs through each article creating functionally a word cloud, with the occurences of the word per a certain constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly affecting sorting.</p></li>
-<li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0.</p></li>
+<li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter than merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0. The user will be able to review changes and then decide if sorting was done accurately or if errors were made. If errors are present, users should be able to define where the article belongs, and the bot will as a result compensate and adapt accordingly. </p></li>
 </ol>
+
+<h1>
+<a id="current-progress" class="anchor" href="#current-progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current Progress</h1>
+
+<p>Currently a working copy of the sorting algorithm has been completed. Step 2 is complete and step 3 is partially complete, with only the actual movement of files being incomplete. Step 1 has barebones work done, but is estimated to be completed in November. </p>
+
+<h2>
+<a id="alpha-images" class="anchor" href="#alpha-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alpha Images</h2>
 
 <p><img src="https://scontent.xx.fbcdn.net/hphotos-xpf1/v/t34.0-12/11995698_1658016897780546_1577559025_n.jpg?oh=d333e82eb6deee456a94db61184b7477&amp;oe=561F4488" alt=""></p>
 
