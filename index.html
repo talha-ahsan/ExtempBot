@@ -1,69 +1,554 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="UTF-8">
-    <title>Extempbot by stwyde</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
-  </head>
-  <body>
-    <section class="page-header">
-      <h1 class="project-name">Extempbot</h1>
-      <h2 class="project-tagline">A Bot to automate extemp research *Beep Boop*</h2>
-      <a href="https://github.com/stwyde/ExtempBot" class="btn">View on GitHub</a>
-      <a href="https://github.com/stwyde/ExtempBot/zipball/master" class="btn">Download .zip</a>
-      <a href="https://github.com/stwyde/ExtempBot/tarball/master" class="btn">Download .tar.gz</a>
-    </section>
+<html>
+	<head>
+		<title>Extemp Bot</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+		<meta name="viewport" content="width=device-width, initial-scale=0.5, maximum-scale=0.5">
+		<link rel="shortcut icon" href="favicon2.ico" />
+	</head>
+	<body>
+		<div class = "gradient">
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "thing one"></div>
+			<div class = "sources">
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/aljaz.png')"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/brookings.png'); transition-delay: 0.1s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/reuters.png'); transition-delay: 0.2s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source spe" style = "background-image: url('logos/wp.png'); transition-delay: 0.3s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/ft.png'); transition-delay: 0.4s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/forbes.png'); transition-delay: 0.5s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/lat.png'); transition-delay: 0.6s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/npr.png'); transition-delay: 0.7s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/nyt.png'); transition-delay: 0.8s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/econ.png'); transition-delay: 0.9s;"></div>
+				</div>
+				<div class = "sourceContainer">
+					<div class = "source" style = "background-image: url('logos/guardian.png'); transition-delay: 1.0s;"></div>
+				</div>
+			</div>
+			
+			<br>
+			<div class = "titleContainer">
+				<div class = "collectiveContainer">
+					<div class = "collective">
 
-    <section class="main-content">
-      <h1>
-<a id="extemporaneous-speaking" class="anchor" href="#extemporaneous-speaking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Extemporaneous Speaking</h1>
+					</div>
+				</div>
+				<div id = "title" class = "">Extemp Bot</div>
+			</div>
+			
+		</div>
+		
+		<div class = "main">
+			<h1>Extemporaneous Speaking</h1>
+			<p>Extemporaneous Speaking (Extemp) is a category of competitive speech and forensics in which participants are given one of
+			three questions to choose from. Each question deals with current events, looking at events from the implications of the Arab
+			Spring, to China's economic growth, to the recent 2016 election headlines. Participants after choosing a question are given
+			30 minutes to prepare and memorize a 7 minute speech. During this time they are allowed to use any resources they have
+			saved on their computers or have brought in print, but can not access the internet in any capacity during their preparation time.
+			<br><br>
+			Due to the breadth of topics available, as well as the expectation that each speech has a citation per minute at a minimum for a
+			participant to be deemed competitive, students will scour the web for sources before a round, attempting to save anything and everything
+			available. This leads to the manual saving of files from common publications like the New York Times, Washington Post, Wall Street Journal,
+			as well as some specific think tanks like the Center for American Progress, the CATO institute, The Council on Foreign Relations, and
+			The Brookings Institute. Finding resources and saving them manually with manual sorting methods can take anywhere from 8 to
+			16 hours per week per person depending on the size of the extemp team. An automated sorting method will also fall short often
+			times due to inaccuracy in categorizing articles.</p>
+			<h1>Goals</h1>
+			<p>The ExtempBot is a collaboration between Talha Ahsan and Benjamin Pankow to create an effective automation of extemp research,
+			bringing in concepts from social network analysis, and very broad ideas from machine learning to create a more effective approach.
+			The goal is to have a single application which can over the course of a few minutes, complete hours of research in an accurate way.</p>
+			<h1>Method</h1>
+			<p>The bot works in three steps, retrieval, scrubbing, classification or sorting.
+				<ol>
+					<li>The bot obtains multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have
+					to be added is created. These articles are then sent to be sorted.</li>
+					<li>The bot then runs through each article creating a word cloud with the occurrences of the word per a certain
+					constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins
+					to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly
+					affecting sorting.</li>
+				</ol>
+			</p>
+		</div>
+		<div class = "gradient" id = "demo2">
+			<div class = "thing two"></div>
+			<div id = "mainStuff">
+				<div id = "magnifyGlass"></div>
+				<div id = "magnifyTextOuter">
+					<div id = "magnifyTextWhite"></div>
+					<div id = "magnifyText"><span id = "text"></span></div>
+				</div>
+			</div>
+		</div>
+		<div class = "main2">
+			<p>
+				<ol>
+					<li>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between
+					the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively
+					accurate assignment. The sorter then merges the scores and values of the article with the value of the category it is assigned to,
+					helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be
+					assigned that word in its cloud with a value of 0. The user will be able to review changes and then decide if sorting was done
+					accurately or if errors were made. If errors are present, users should be able to define where the article belongs, and the bot
+					will as a result compensate and adapt accordingly.</li>
+				</ol>
+			</p>
+			<h1>Current Progress</h1>
+			<p>Currently a working copy of the sorting algorithm has been completed. Step 2 is complete and step 3 is partially complete, with only
+			the actual movement of files being incomplete. Step 1 has barebones work done, but is estimated to be completed in November.</p>
+		</div>
 
-<p>Extemporaneous Speaking (Extemp) is a category of competitive speech and forensics in which participants are given one of three questions to choose from. Each question deals with current events, looking at events from the implications of the Arab Spring, to China's economic growth, to the recent 2016 election headlines. Participants after choosing a question are given 30 minutes to prepare and memorize a 7 minute speech. During this time they are allowed to use any resources they have saved on their computers or have brought in print, but can not access the internet in any capacity during their preparation time. </p>
+		
+		<script>
+			$(window).load(function() {
+				$(".source, .collective, #title").addClass("loaded");
+				
+				var $things = $(".thing.one");
+				var $collective = $(".collective");
+				
+				var iXs = [];
+				var iYs = [];
+				var sources = [];
+				var n = 0;
+				var x = $collective.offset().left + $collective.width() / 2 - $things.eq(0).width() / 2;
+				var y = $collective.offset().top + $collective.height() / 2 - $things.eq(0).height() / 2;;
+				
+				var sins = [];
+				var coss = [];
+				var dist = -(8 * Math.PI / 8) / (11. - 1);
+				var booping = false;
+				
+				var Anim2x = 0;
+				var Anim2y = 0;
+				var numSources = 11;
+				
+				var texts = [
+				"<span class='lowlight'>...it expected another cut to the </span>Chinese<span class='lowlight'> central </span>banks<span class='lowlight'>' reserve requirement ratio (RRR) late this year and another four in 2016, together with two more </span>interest<span class='lowlight'> rate cuts...</span>"
+				
+				]
+				
+				
+				
+				
+				$thing2 = $(".thing.two");
+				$textThing = $("#magnifyTextOuter");
+				$textThingArrow = $("#magnifyTextWhite");
+				$textThingText = $("#magnifyTextOuter #text");
+				$textThingText.css("opacity", 0);
 
-<p>Due to the breadth of topics available, as well as the expectation that each speech has a citation per minute at a minimum for a participant to be deemed competitive, students will scour the web for sources before a round, attempting to save anything and everything available. This leads to the manual saving of files from common publications like the New York Times, Washington Post, Wall Street Journal, as well as some specific think tanks like the Center for American Progress, the CATO institute, The Council on Foreign Relations, and The Brookings Institute. Finding resources and saving them manually with manual sorting methods can take anywhere from 8 to 16 hours per week per person depending on the size of the extemp team. An automated sorting method will also fall short often times due to inaccuracy in categorizing articles. </p>
+				
+				function anim2P4()
+				{
+					var iY = Anim2y + 200;
+					
+					$thing2.animate(
+					{
+						width: "25px",
+						height: "25px",
+						left: Anim2x,
+						top: Anim2y
+					},
+					{
+						duration: 500,
+						complete: function()
+						{
+							$thing2.animate(
+							{
+								top: iY
+							},
+							{
+								duration: 500,
+								easing: "swing",
+								complete: function()
+								{
+									$thing2.animate(
+									{
+										opacity: 0
+									},
+									{
+										duration: 500,
+										complete: function()
+										{
+											anim2P1();
+										}
+									});
+								}
+							});
+						}
+					});
+					
+					
+				}
+				
+				function anim2P3()
+				{
 
-<h1>
-<a id="goal" class="anchor" href="#goal" aria-hidden="true"><span class="octicon octicon-link"></span></a>Goal</h1>
+					$textThingText.animate(
+					{
+						opacity: 0
+					},
+					{
+						duration: 500,
+						complete: function()
+						{
+	
+							$textThingArrow.animate(
+							{
+								borderRightWidth: "0px",
+								borderTopWidth: "0px",
+								borderBottomWidth: "0px"
+							},
+							{
+								duration: 500
+							});
+							
+							$textThing.animate(
+							{
+								width: "0px",
+								height: "0px"
+							},
+							{
+								duration: 500,
+								complete: function()
+								{
+									anim2P4();
+								}
+							});
+						}
+					});
+				}
+				
+				function anim2P2()
+				{
+					$textThingArrow.css("border-right-width", 0);
+					$textThingArrow.css("border-bottom-width", 0);
+					$textThingArrow.css("border-top-width", 0);
+					
+					$textThingArrow.animate(
+					{
+						borderRightWidth: "150px",
+						borderTopWidth: "23px",
+						borderBottomWidth: "23px"
+					},
+					{
+						duration: 500
+					});
+					
+					$textThing.animate(
+					{
+						width: "500px",
+						height: "200px"
+					},
+					{
+						duration: 500,
+						complete: function()
+						{
+							var randText = texts[Math.floor(Math.random() * texts.length)];
+							console.log(randText);
+							$textThingText.html(randText);
+							
+							$textThingText.animate(
+							{
+								opacity: 1
+							},
+							{
+								duration: 500,
+								complete: function()
+								{
+									window.setTimeout(function() { anim2P3() }, 2000);
+								}
+							});
+						}
+					});
+				}
+				
+				function anim2P1()
+				{
+					var iY = Anim2y - 200;
+					var rand = Math.random();
+					var g = 99 + Math.floor(rand * 89);
+					var b = 198 + Math.floor(rand * -62);
+					var color = "#2B" + g.toString(16) + b.toString(16);
+					
+					var shape = Math.floor(Math.random() * 2);
+					
+					if (shape == 0)
+					{
+						$thing2.removeClass("circle");
+						$thing2.removeClass("triangle");
+					}
+					else if (shape == 1)
+					{
+						$thing2.addClass("circle");
+						$thing2.removeClass("triangle");
+					}
+					else
+					{
+						$thing2.removeClass("circle");
+						$thing2.addClass("triangle");
+					}
+					$thing2.css("opacity", 0);
+					$thing2.css("left", Anim2x);
+					$thing2.css("top", iY);
+					$thing2.css("background-color", color);
+					
+					$thing2.animate(
+					{
+						opacity: 1,
+					},
+					{
+						duration: 500,
+						complete: function()
+						{
+							$thing2.animate(
+							{
+								top: Anim2y
+							},
+							{
+								duration: 500,
+								easing: "swing",
+								complete: function()
+								{
+									$thing2.animate(
+									{
+										width: "55px",
+										height: "55px",
+										left: (Anim2x - 15),
+										top: (Anim2y - 15)
+									},
+									{
+										duration: 500,
+										complete: function()
+										{
+											anim2P2();
+										}
+									});
+								}
+							});
+						}
+				
+					});
+				}
+				
+				
+				
+				function boop()
+				{
+					if (true)
+					{	
+						$(".collective").stop();
+						booping = true;
+						$(".collective").animate(
+						{
+							width: "130px",
+							height: "130px"
+						},
+						{
+							duration: 100,
+							complete: function()
+							{
+								$(".collective").animate(
+								{
+									width: "120px",
+									height: "120px"
+								},
+								{
+									duration: 100,
+									complete: function() { booping = false }
+								});
+							}
+				
+						});
+					}
+				}
+				
+				function boopSource(num)
+				{
 
-<p>The ExtempBot is a collaboration between Talha Ahsan and Benjamin Pankow to create an effective automation of extemp research, bringing in concepts from social network analysis, and very broad ideas from machine learning to create a more effective approach. The goal is to have a single application which can over the course of a few minutes, complete hours of research in an accurate way. </p>
+					$(".source").eq(num).animate(
+					{
+						width: "70px",
+						height: "70px"
+					},
+					{
+						duration: 100,
+						complete: function()
+						{
+							$(".source").eq(num).animate(
+							{
+								width: "64px",
+								height: "64px"
+							},
+							{
+								duration: 100
+							});
+						}
+			
+					});
+					
+				}
+				
+				function article(num)
+				{
+					var id = Math.floor(Math.random() * numSources);
+					boopSource(id);
+					
+					var iX = iXs[id];
+					var iY = iYs[id];
+					var distX = x - iX;
+					var distY = y - iY;
+					var $thing = $things.eq(num);
+					
+					var rand = Math.random();
+					var g = 99 + Math.floor(rand * 89);
+					var b = 198 + Math.floor(rand * -62);
+					var color = "#2B" + g.toString(16) + b.toString(16);
+					
+					var shape = Math.floor(Math.random() * 2);
+					
+					if (shape == 0)
+					{
+						$thing.removeClass("circle");
+						$thing.removeClass("triangle");
+					}
+					else if (shape == 1)
+					{
+						$thing.addClass("circle");
+						$thing.removeClass("triangle");
+					}
+					else
+					{
+						$thing.removeClass("circle");
+						$thing.addClass("triangle");
+					}
+					
+					$thing.css("left", iX);
+					$thing.css("top", iY);
+					$thing.css("background-color", color);
+					
+					if (id == 5)
+					{
+						var xThing = 0;
+					}
+					else
+					{
+						var xThing = distX / coss[id];
+					}
+					var yas = distY - (xThing * sins[id]);
+					
+			
+					window.setTimeout(function() { article((num + 1) % 11) }, 400);
+				
 
-<h1>
-<a id="method" class="anchor" href="#method" aria-hidden="true"><span class="octicon octicon-link"></span></a>Method</h1>
+					$thing.animate(
+					{
+						top: y,
+						left: x
+					},
+					{
+						//duration: xThing * 3,
+						duration: Math.sqrt(distX * distX + distY * distY) * 5,
+						easing: "linear",
+						progress: function(animation, progress, remain)
+						{
+							if (remain < 275)
+							{
+								$thing.stop();
+								$thing.css("left", -100);
+								$thing.css("top", -100);
+								boop();
+							}
+						},
+						complete: function()
+						{
+							
+						}
+			
+					});
 
-<p>The bot works in three steps, retrieval, scrubbing, classification or sorting. </p>
-
-<ol>
-<li><p>The bot obtains multiple RSS feeds which the user specifies. Going through each feed, a collection of articles which have to be added is created. These articles are then sent to be sorted.</p></li>
-<li><p>The bot then runs through each article creating functionally a word cloud, with the occurences of the word per a certain constant as the weighting value for the size of each word. Using this and having presorted articles on hand, the bot then begins to sort. Prior to weighting, the article is scrubbed of stop words from the NLTK in order to prevent many common words from directly affecting sorting.</p></li>
-<li><p>Sorting is done using a distance algorithm using a single plane per each word occurring in the article. The distance total between the article with its own words, and the category which creates averages of the articles already sorted then leads to a relatively accurate assignment. The sorter then merges the scores and values of the article with the value of the category it is assigned to, helping create a more accurate algorithm. If a category does not contain the word in the article, then it will automatically be assigned that word in its cloud with a value of 0. The user will be able to review changes and then decide if sorting was done accurately or if errors were made. If errors are present, users should be able to define where the article belongs, and the bot will as a result compensate and adapt accordingly. </p></li>
-</ol>
-
-<h1>
-<a id="current-progress" class="anchor" href="#current-progress" aria-hidden="true"><span class="octicon octicon-link"></span></a>Current Progress</h1>
-
-<p>Currently a working copy of the sorting algorithm has been completed. Step 2 is complete and step 3 is partially complete, with only the actual movement of files being incomplete. Step 1 has barebones work done, but is estimated to be completed in November. </p>
-
-<h2>
-<a id="alpha-images" class="anchor" href="#alpha-images" aria-hidden="true"><span class="octicon octicon-link"></span></a>Alpha Images</h2>
-
-<p><img src="https://scontent.xx.fbcdn.net/hphotos-xpf1/v/t34.0-12/11995698_1658016897780546_1577559025_n.jpg?oh=d333e82eb6deee456a94db61184b7477&amp;oe=561F4488" alt=""></p>
-
-<p><img src="https://scontent.xx.fbcdn.net/hphotos-xaf1/v/t34.0-12/11997028_1658016437780592_1108120312_n.jpg?oh=d0910908e4c10d9eee3b65d4e4721519&amp;oe=56200F64" alt=""></p>
-
-<p><img src="https://scontent.xx.fbcdn.net/hphotos-xta1/v/t34.0-12/11997210_1658016157780620_1670084691_n.jpg?oh=99dd827ef382eaf8534b716fbcb6958b&amp;oe=561F4C2B" alt=""></p>
-
-      <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/stwyde/ExtempBot">Extempbot</a> is maintained by <a href="https://github.com/stwyde">stwyde</a>.</span>
-
-        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
-      </footer>
-
-    </section>
-
-  
-  </body>
+				}
+				
+				function updatePos()
+				{
+					var $srcElems = $(".sourceContainer:visible").filter(function() {
+						return $(this).position().top == 0;
+					});
+					numSources = $srcElems.length;
+					sources = [];
+					iXs = [];
+					iYs = [];
+					sins = [];
+					coss = [];
+					n = 0;
+					x = $collective.offset().left + $collective.width() / 2 - $things.eq(0).width() / 2;
+				    y = $collective.offset().top + $collective.height() / 2 - $things.eq(0).height() / 2;
+					$things.stop();
+					$things.css("left", -100);
+					$things.css("top", -100);
+					Anim2x = $("#mainStuff").position().left + $("#magnifyGlass").position().left + 79 - 12.5;
+					Anim2y = $("#mainStuff").position().top + $("#magnifyGlass").position().top + 79 - 12.5;
+					$srcElems.each(function()
+					{
+						var $thing = $things.eq(n);
+						var $source = $srcElems.eq(n);
+						sources.push = $source;
+						iXs.push($source.offset().left + $source.width() / 2 - $thing.width() / 2);
+						iYs.push($source.offset().top + $source.height() - $thing.height() / 2);
+						sins.push(-Math.sin(dist * n - (0 * Math.PI / 16)));
+						coss.push(Math.cos(dist * n - (0 * Math.PI / 16)));
+						n = n + 1;
+					});
+				}
+				updatePos();
+				anim2P1();
+			
+				window.setTimeout(function() {
+					article(0) 
+					$(".collective").css("transition", "none");
+					$(".source").css("transition", "none");
+				}, 2000);
+				
+				$(window).on('resize', function()
+				{
+					updatePos();
+				});
+				
+				function distance(x1, y1, x2, y2)
+				{
+					return Math.sqrt((x1 + x2) * (x1 + x2) + (y1 + y2) * (y1 + y2));
+				}
+				
+			})
+		</script>
+	</body>
 </html>
