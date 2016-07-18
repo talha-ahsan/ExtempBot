@@ -361,6 +361,32 @@ def manualCategorization():
                 cmd = cmd.lower()
                 category = getCategory(cmd)
             category.addArticle(article)
+        elif (cmd[:5] == "list "):
+            file = cmd[5:]
+            print file
+            print os.path.isfile(file)
+            if (os.path.isfile(file) and file[-4:] == ".txt"):
+                cmd = raw_input("Which category would you like to add the contents of '" + file + "' to?: ")
+                cmd = cmd.lower()
+                category = getCategory(cmd)
+                while (category == None):
+                    cmd = raw_input("Which category would you like to add the contents of '" + file + "' to?: ")
+                    cmd = cmd.lower()
+                    category = getCategory(cmd)
+                
+                lines = [line.strip() for line in open(file)]
+                for url in lines:
+                    narticle = nArticle(url)
+                    narticle.download()
+                    narticle.parse()
+                    text = narticle.text
+
+                    # create an article object and calculate the word rate
+                    id = getNextArticleID()
+                    article = Article(id, url, text)
+                    article.calculateWordRate()
+                    
+                    category.addArticle(article)
             
         cmd = raw_input('\nWhat would you like to do? (use "help" for help): ')
         cmd = cmd.lower()
