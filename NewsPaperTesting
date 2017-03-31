@@ -1,0 +1,18 @@
+import newspaper
+
+NYTimes = newspaper.build('https://www.nytimes.com/')
+
+for article in NYTimes.articles:
+    print(article.url)
+
+
+#note this function shoudl be working but apparently it's not. I gotta figure out what the do here before I can actually code anyhting
+
+
+# new plan: import newspaper, create a whitelist of sources to create categories.
+
+#From there we get a NYTimes source, (example: Americas)
+
+#From there we go through all the articles in the AMericas section, and get the article text. this is done using article.text, and article.parse()
+
+#We then filter it out using the common words from the library we have available, and then we go further,
