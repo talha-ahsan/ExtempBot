@@ -8,6 +8,7 @@ from newspaper import Article as nArticle
 import feedparser
 import time
 import calendar
+import pdfkit
 
 #An arbitrary set of feeds off the new york times RSS webpage.
 nytimes = ['http://rss.nytimes.com/services/xml/rss/nyt/World.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Africa.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Americas.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/AsiaPacific.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Europe.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/MiddleEast.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/US.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Education.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Politics.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Business.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/EnergyEnvironment.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/InternationalBusiness.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/SmallBusiness.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Economy.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/MediaandAdvertising.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/YourMoney.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Technology.xml', 'http://bits.blogs.nytimes.com/feed/', 'http://rss.nytimes.com/services/xml/rss/nyt/PersonalTech.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Science.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Environment.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Health.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Research.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Nutrition.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/HealthCarePolicy.xml', 'http://rss.nytimes.com/services/xml/rss/nyt/Views.xml']
@@ -43,3 +44,4 @@ for feed in feeds:
 		entries.append(nArticle(item["link"]))
 #From here there seems to be a set of entries containing a ton of Articles using the URLs from the RSS feed.
 
+pdfkit.from_url(entries[1].url, 'out.pdf')
