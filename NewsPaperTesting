@@ -1,13 +1,18 @@
-import newspaper
+import feedparser
 
-NYTimes = newspaper.build('https://www.nytimes.com/')
+NYTAmericas = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Americas.xml")
 
-for article in NYTimes.articles:
-    print(article.url)
+NYTAfrica = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Africa.xml")
 
+NYTEurope = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Europe.xml")
 
-#note this function shoudl be working but apparently it's not. I gotta figure out what the do here before I can actually code anyhting
+NYTMidEast = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/MiddleEast.xml")
 
+ArticlesAmericas = NYTAmericas.items()
+
+for article in ArticlesAmericas:
+    print(article["title"])
+    #should print title for Articles Americas article. the feedparser is sorta weird with all this.
 
 # new plan: import newspaper, create a whitelist of sources to create categories.
 
