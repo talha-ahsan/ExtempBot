@@ -12,24 +12,37 @@ NYTEurope = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Europe
 NYTMidEast = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/MiddleEast.xml")
 
 americas = Category("Americas", "null path")
-for article in NYTAmericas.entries:
-    print(article.link)
-    articleToAdd = nArticle(article.link)
+for entry in NYTAmericas.entries:
+    print(entry.link)
+    articleToAdd = nArticle(entry.link)
     articleToAdd.download()
     articleToAdd.parse()
     text = articleToAdd.text
-    americas.addArticle(Article(01, article.link, text))
+    americas.addArticle(Article(01, entry.link, text))
 
     #should print title for Articles Americas article. the feedparser is sorta weird with all this.
 
+articleSet = americas.articles
+articleSet[0].calculateWordRate()
+wordSet = articleSet[0].articleWordRate.keys()
+maxVal = 0
+maxWord = ""
+for i in range(3):
+    for word in wordSet:
+        if wordSet[word] > maxVal:
+            maxVal = wordSet['word']
+            maxWord = word
+    wordSet.__delitem__(maxWord)
+    print(maxWord + " " + maxVal)
 
-print("now printing NYT categories:")
-NYT = newspaper.build('http://nytimes.com')
-for category in NYT.category_urls():
-    print(category)
-print("now printing NYT articles from main page")
-for article in NYT.articles:
-    print(article.title)
+#print("now printing NYT categories:")
+#NYT = newspaper.build('http://nytimes.com')
+#for category in NYT.category_urls():
+#    print(category)
+#print("now printing NYT articles from main page")
+#for article in NYT.articles:
+#    print(article.title)
+
 # new plan: import newspaper, create a whitelist of sources to create categories.
 
 #From there we get a NYTimes source, (example: Americas)

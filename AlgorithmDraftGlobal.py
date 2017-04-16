@@ -5,8 +5,9 @@ import operator #temp for testing
 import pickle
 from nltk.corpus import stopwords
 from newspaper import Article as nArticle
+import feedparser
 
-nextArticleID = 1
+nextArticleID = 0
 
 stopwords = set(stopwords.words('english'))
 globalWordCloud = []
@@ -121,6 +122,7 @@ class Article:
         data = [self.id, self.articleWordRate, self.articleOccuranceCount, self.articleURL, self.articleBody]
         pickle.dump(data, saveFile)
         saveFile.close()
+
 
     @classmethod
     def loadFromFile(cls, id):
@@ -282,5 +284,48 @@ def testMethod2():
     sortedWordRate = sorted(article.articleWordRate.items(), key=operator.itemgetter(1))
     categories[0].addArticle(article)
 
+def testMethod3():
+    #First prime 3 categories
+    categories.append(Category("Americas", "null Path"))
+    NYTAmericas = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Americas.xml")
+    for entry in NYTAmericas.entries:
+        narticleToAdd = nArticle(entry.link)
+        narticleToAdd.download()
+        narticleToAdd.parse()
+        text = narticleToAdd.text
+        articleToAdd = Article(getNextArticleID(), entry.link, text)
+        articleToAdd.calculateWordRate()
+        categories[0].addArticle(articleToAdd)
+    print("now Africa")
+    categories.append(Category("Africa", "Null Path"))
+    NYTAfrica = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Africa.xml")
+    for entry in NYTAfrica.entries:
+        narticleToAdd = nArticle(entry.link)
+        narticleToAdd.download()
+        narticleToAdd.parse()
+        text = narticleToAdd.text
+        articleToAdd = Article(getNextArticleID(), entry.link, text)
+        articleToAdd.calculateWordRate()
+        categories[1].addArticle(articleToAdd)
+    print("Now Europe")
+    categories.append(Category("Europe", "Null Path"))
+    NYTEurope = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Europe.xml")
+    for entry in NYTEurope.entries:
+        narticleToAdd = nArticle(entry.link)
+        narticleToAdd.download()
+        narticleToAdd.parse()
+        text = narticleToAdd.text
+        articleToAdd = Article(getNextArticleID(), entry.link, text)
+        articleToAdd.calculateWordRate()
+        categories[2].addArticle(articleToAdd)
+    print("Now test")
+    newsArticle = nArticle('http://www.nytimes.com/2015/09/02/us/politics/cnn-alters-debate-criteria-which-could-help-carly-fiorina.html')
+    newsArticle.download()
+    newsArticle.parse()
+    testArticle = Article(getNextArticleID(), newsArticle.url, newsArticle.text)
+    testArticle.calculateWordRate()
+    for cat in categories:
+        print(distance(testArticle, cat)
+)
 if __name__ == '__main__':
-    testMethod()
+    testMethod3()
