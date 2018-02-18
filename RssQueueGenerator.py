@@ -55,14 +55,53 @@ washpo = ['http://feeds.washingtonpost.com/rss/politics',
           'http://feeds.washingtonpost.com/rss/national',
           'http://feeds.washingtonpost.com/rss/rss_speaking-of-science',
           'http://feeds.washingtonpost.com/rss/world']
+bbc = ['http://feeds.bbci.co.uk/news/world/rss.xml',
+       'http://feeds.bbci.co.uk/news/uk/rss.xml',
+       'http://feeds.bbci.co.uk/news/business/rss.xml',
+       'http://feeds.bbci.co.uk/news/politics/rss.xml',
+       'http://feeds.bbci.co.uk/news/health/rss.xml',
+       'http://feeds.bbci.co.uk/news/education/rss.xml',
+       'http://feeds.bbci.co.uk/news/science_and_environment/rss.xml',
+       'http://feeds.bbci.co.uk/news/technology/rss.xml',
+       'http://feeds.bbci.co.uk/news/entertainment_and_arts/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/africa/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/asia/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/europe/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/latin_america/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/middle_east/rss.xml',
+       'http://feeds.bbci.co.uk/news/world/us_and_canada/rss.xml',
+       'http://feeds.bbci.co.uk/news/england/rss.xml',
+       'http://feeds.bbci.co.uk/news/northern_ireland/rss.xml',
+       'http://feeds.bbci.co.uk/news/scotland/rss.xml',
+       'http://feeds.bbci.co.uk/news/wales/rss.xml']
 
-masterFeedURLList = nytimes + wsj + washpo
-articleQueue = queue.Queue()
-for url in masterFeedURLList:
-    feed = (feedparser.parse(url))
-    for item in feed:
-        articleQueue.put(item)
+class ArticleQueueGenerator():
+    masterFeedURLList = []
+    supplimentalFeeds = []
 
-print(articleQueue._qsize())
+    def __init__(self, optional_feeds = []):
+        self.masterFeedURLList = nytimes + wsj + washpo + bbc + optional_feeds
+        self.articleQueue = queue.Queue()
+        self.generateQueue(self.masterFeedURLList)
+
+    def generateQueue(self, feedURLList):
+        for url in feedURLList:
+            feed = feedparser.parse(url)
+            for item in feed:
+                self.articleQueue.put(item)
+
+    def getQueue(self):
+        return self.articleQueue
+
+    def getQueueSize(self):
+        return self.articleQueue._qsize()
+
+    def addMoreFeeds(self, feeds):
+        self.supplimentalFeeds += feeds
+        self.generateQueue(self.supplimentalFeeds)
+
+
+generator = ArticleQueueGenerator()
+print(generator.getQueueSize())
 #Prints out the number of articles in the article Queue. The articles need to still be processed but this is a
 # semidecent way of aggregating everything (I hope)
