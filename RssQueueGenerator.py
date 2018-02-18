@@ -87,7 +87,7 @@ class ArticleQueueGenerator():
     def generateQueue(self, feedURLList):
         for url in feedURLList:
             feed = feedparser.parse(url)
-            for item in feed:
+            for item in feed.entries:
                 self.articleQueue.put(item)
 
     def getQueue(self):
@@ -103,5 +103,6 @@ class ArticleQueueGenerator():
 
 generator = ArticleQueueGenerator()
 print(generator.getQueueSize())
+articleQueue = generator.getQueue()
 #Prints out the number of articles in the article Queue. The articles need to still be processed but this is a
 # semidecent way of aggregating everything (I hope)
