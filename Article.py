@@ -9,4 +9,4 @@ class Article:
         self.newspaperFile.download()
         self.newspaperFile.parse()
         self.text = self.newspaperFile.text
-
+        self.text = self.text.lower()

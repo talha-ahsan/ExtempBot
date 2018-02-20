@@ -18,7 +18,7 @@ for entry in NYTAmericas.entries:
     articleToAdd.download()
     articleToAdd.parse()
     text = articleToAdd.text
-    americas.addArticle(Article(01, entry.link, text))
+    americas.addArticle(Article( entry.link, text))
 
     #should print title for Articles Americas article. the feedparser is sorta weird with all this.
 

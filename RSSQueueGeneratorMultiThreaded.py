@@ -1,7 +1,7 @@
 __author__ = 'talhaahsan and benpankow'
 import feedparser
 import queue
-from threading import Thread
+from multiprocessing import Process
 
 nytimes = ['http://rss.nytimes.com/services/xml/rss/nyt/World.xml',
            'http://rss.nytimes.com/services/xml/rss/nyt/Africa.xml',
@@ -80,13 +80,38 @@ class ArticleQueueGenerator():
     masterFeedURLList = []
     supplimentalFeeds = []
 
-    def __init__(self, optional_feeds = []):
+    def __init__(self, optional_feeds = [], num_processes = 2):
+        self.num_processes = num_processes
         self.masterFeedURLList = nytimes + wsj + washpo + bbc + optional_feeds
+        self.masterFeedURLQueue = queue.Queue()
+        for url in self.masterFeedURLList:
+            self.masterFeedURLQueue.put(url)
         self.articleQueue = queue.Queue()
-        self.generateQueue(self.masterFeedURLList)
+        self.generateQueueMT()
+
+    def generateQueueMT(self):
+        print("Now generating the multithreaded queue with " + self.num_processes.__str__() + " processes")
+        # todo figure out what's going on with multithreading
+        processes = []
+        for i in range(self.num_processes):
+            p = Process(target= self.addToQueueMT(), args=())
+            p.start()
+            processes.append(p)
+        for p in processes:
+            p.join()
+        self.articleQueue.join()
+
+    def addToQueueMT(self):
+        print("Hello from a process")
+        while self.masterFeedURLQueue.not_empty:
+            url = self.masterFeedURLQueue.get()
+            print(url)
+            feed = feedparser.parse(url)
+            for item in feed.entries:
+                self.articleQueue.put(item)
+        self.articleQueue.task_done()
 
     def generateQueue(self, feedURLList):
-        #todo multithread this baby!
         for url in feedURLList:
             feed = feedparser.parse(url)
             for item in feed.entries:
@@ -103,7 +128,7 @@ class ArticleQueueGenerator():
         self.generateQueue(self.supplimentalFeeds)
 
 
-generator = ArticleQueueGenerator()
+generator = ArticleQueueGenerator(num_processes=4)
 print(generator.getQueueSize())
 articleQueue = generator.getQueue()
 #Prints out the number of articles in the article Queue. The articles need to still be processed but this is a
