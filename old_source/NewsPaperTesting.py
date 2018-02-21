@@ -1,8 +1,9 @@
 import feedparser
-import newspaper
 from newspaper import Article as nArticle
-from AlgorithmDraftGlobal import Article
-from AlgorithmDraftGlobal import Category
+
+from old_source.AlgorithmDraftGlobal import Article
+from old_source.AlgorithmDraftGlobal import Category
+
 NYTAmericas = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Americas.xml")
 
 NYTAfrica = feedparser.parse("http://www.nytimes.com/services/xml/rss/nyt/Africa.xml")
